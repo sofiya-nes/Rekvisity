@@ -1,49 +1,456 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Оплата по реквизитам</title>
-    <script>
-        // Извлекаем реквизиты из URL
-        const params = new URLSearchParams(window.location.search);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата адвокату Несмияновой МП</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         
-        function payWithBank(bank) {
-            const bic = params.get('bic');
-            const account = params.get('account');
-            const name = params.get('name');
-            const inn = params.get('inn');
-            const amount = params.get('amount');
-            
-            // Deeplinks для банков (примеры)
-            const deeplinks = {
-                sber: `sberbank://transfer?bic=${bic}&account=${account}&amount=${amount}&name=${name}`,
-                tinkoff: `tinkoff://pay?bik=${bic}&accountNumber=${account}&amount=${amount}&name=${name}`,
-                vtb: `vtb24://transfer?bic=${bic}&account=${account}&sum=${amount}&beneficiary=${name}`
-            };
-            
-            if (deeplinks[bank]) {
-                window.location.href = deeplinks[bank];
-            } else {
-                alert("Ссылка для банка не настроена");
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f4f8;
+            color: #2c3e50;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+            color: #3498db;
+        }
+        
+        .section-title h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        
+        @media (min-width: 768px) {
+            .details-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
-    </script>
+        
+        .detail-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 18px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .detail-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .detail-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .detail-value {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #1e293b;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .copy-btn:hover {
+            color: #2563eb;
+        }
+        
+        .banks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .bank-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: #3498db;
+        }
+        
+        .bank-card img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        
+        .bank-card p {
+            color: #334155;
+            font-weight: 500;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .copy-section {
+            background: #f1f8ff;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px dashed #3498db;
+            text-align: center;
+        }
+        
+        .copy-btn-large {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+        }
+        
+        .copy-btn-large:hover {
+            background: #258cd1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.35);
+        }
+        
+        .footer-note {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+            font-size: 0.95rem;
+            background: #f8fafc;
+            border-top: 1px solid #edf2f7;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 500;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .notification.show {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
-    <h1>Данные для оплаты</h1>
-    <p>Получатель: <span id="name"></span></p>
-    <p>Счёт: <span id="account"></span></p>
-    <p>БИК: <span id="bic"></span></p>
+    <div class="container">
+        <div class="header">
+            <h1>Оплата адвокату Несмияновой МП</h1>
+            <p>Выберите ваш банк для быстрой оплаты или скопируйте реквизиты для оплаты в любом другом банке</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-file-invoice"></i>
+                    <h2>Реквизиты для оплаты</h2>
+                </div>
+                
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>Получатель</span>
+                            <button class="copy-btn" data-value="Коллегия адвокатов Ленинского района">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">Коллегия адвокатов Ленинского района</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>ИНН</span>
+                            <button class="copy-btn" data-value="7449040890">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">7449040890</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>КПП</span>
+                            <button class="copy-btn" data-value="744901001">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">744901001</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>Банк</span>
+                            <button class="copy-btn" data-value="Челиндбанк">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">Челиндбанк</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>Счёт</span>
+                            <button class="copy-btn" data-value="40703810707120000397">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">40703810707120000397</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>БИК</span>
+                            <button class="copy-btn" data-value="047501711">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">047501711</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>Корр. счёт</span>
+                            <button class="copy-btn" data-value="30101810400000000711">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">30101810400000000711</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">
+                            <span>Назначение платежа</span>
+                            <button class="copy-btn" data-value="Адвокату Несмияновой МП">
+                                <i class="far fa-copy"></i> Копировать
+                            </button>
+                        </div>
+                        <div class="detail-value">Адвокату Несмияновой МП</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h2>Оплатить через приложение банка</h2>
+                </div>
+                
+                <div class="banks-grid">
+                    <div class="bank-card" data-bank="sber">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Sberbank_Logo_2020.svg/240px-Sberbank_Logo_2020.svg.png" alt="Сбербанк">
+                        <p>Сбербанк</p>
+                    </div>
+                    
+                    <div class="bank-card" data-bank="tinkoff">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tinkoff_Bank_Logo_2020.svg/240px-Tinkoff_Bank_Logo_2020.svg.png" alt="Тинькофф">
+                        <p>Тинькофф</p>
+                    </div>
+                    
+                    <div class="bank-card" data-bank="vtb">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/VTB_Logo.svg/240px-VTB_Logo.svg.png" alt="ВТБ">
+                        <p>ВТБ</p>
+                    </div>
+                    
+                    <div class="bank-card" data-bank="alfa">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Alfa-Bank_logo.svg/240px-Alfa-Bank_logo.svg.png" alt="Альфа-банк">
+                        <p>Альфа-банк</p>
+                    </div>
+                    
+                    <div class="bank-card" data-bank="raiffeisen">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Raiffeisen_Bank_International_2015_logo.svg/240px-Raiffeisen_Bank_International_2015_logo.svg.png" alt="Райффайзенбанк">
+                        <p>Райффайзен</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copy-section">
+                <h3>Для других банков</h3>
+                <p>Скопируйте все реквизиты одним кликом и вставьте в платежную форму вашего банка</p>
+                <button class="copy-btn-large" id="copy-all-btn">
+                    <i class="far fa-copy"></i> Скопировать все реквизиты
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            <p>После оплаты сохраните квитанцию об оплате для подтверждения платежа</p>
+        </div>
+    </div>
     
-    <h2>Выберите банк:</h2>
-    <button onclick="payWithBank('sber')">Сбербанк</button>
-    <button onclick="payWithBank('tinkoff')">Тинькофф</button>
-    <button onclick="payWithBank('vtb')">ВТБ</button>
+    <div class="notification" id="notification">Реквизиты скопированы!</div>
 
     <script>
-        // Показываем реквизиты на странице
-        document.getElementById('name').textContent = params.get('name');
-        document.getElementById('account').textContent = params.get('account');
-        document.getElementById('bic').textContent = params.get('bic');
+        // Deeplinks для банков
+        const bankLinks = {
+            sber: "sberbank://transfer?bic=047501711&account=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&kpp=744901001&bankName=Челиндбанк&corrAccount=30101810400000000711&comment=Адвокату%20Несмияновой%20МП",
+            tinkoff: "tinkoff://pay?bik=047501711&accountNumber=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&comment=Адвокату%20Несмияновой%20МП",
+            vtb: "vtb24://transfer?bic=047501711&account=40703810707120000397&beneficiary=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&kpp=744901001&paymentPurpose=Адвокату%20Несмияновой%20МП",
+            alfa: "alfaclient://xfer/toaccount?bic=047501711&account=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&comment=Адвокату%20Несмияновой%20МП",
+            raiffeisen: "raiffeisen://transfer?bic=047501711&account=40703810707120000397&beneficiary=Коллегия%20адвокатов%20Ленинского%20района&purpose=Адвокату%20Несмияновой%20МП"
+        };
+        
+        // Полные реквизиты для копирования
+        const fullDetails = `Назначение платежа: Адвокату Несмияновой МП
+Получатель: Коллегия адвокатов Ленинского района
+ИНН: 7449040890
+КПП: 744901001
+Банк: Челиндбанк
+БИК: 047501711
+Счет: 40703810707120000397
+Корр. счет: 30101810400000000711`;
+        
+        // Функция копирования
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const notification = document.getElementById('notification');
+                notification.textContent = 'Реквизиты скопированы!';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }).catch(err => {
+                console.error('Ошибка копирования: ', err);
+            });
+        }
+        
+        // Инициализация кнопок копирования
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                copyToClipboard(value);
+            });
+        });
+        
+        // Кнопка копирования всех реквизитов
+        document.getElementById('copy-all-btn').addEventListener('click', function() {
+            copyToClipboard(fullDetails);
+        });
+        
+        // Обработчики для банков
+        document.querySelectorAll('.bank-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const bank = this.dataset.bank;
+                if (bankLinks[bank]) {
+                    window.location.href = bankLinks[bank];
+                    
+                    // Резервное решение на случай, если приложение не открылось
+                    setTimeout(() => {
+                        if (!document.hidden) {
+                            alert('Приложение банка не найдено. Скопируйте реквизиты и выполните платеж вручную.');
+                        }
+                    }, 1000);
+                }
+            });
+        });
     </script>
 </body>
 </html>
