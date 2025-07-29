@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Оплата по реквизитам</title>
+    <script>
+        // Извлекаем реквизиты из URL
+        const params = new URLSearchParams(window.location.search);
+        
+        function payWithBank(bank) {
+            const bic = params.get('bic');
+            const account = params.get('account');
+            const name = params.get('name');
+            const inn = params.get('inn');
+            const amount = params.get('amount');
+            
+            // Deeplinks для банков (примеры)
+            const deeplinks = {
+                sber: `sberbank://transfer?bic=${bic}&account=${account}&amount=${amount}&name=${name}`,
+                tinkoff: `tinkoff://pay?bik=${bic}&accountNumber=${account}&amount=${amount}&name=${name}`,
+                vtb: `vtb24://transfer?bic=${bic}&account=${account}&sum=${amount}&beneficiary=${name}`
+            };
+            
+            if (deeplinks[bank]) {
+                window.location.href = deeplinks[bank];
+            } else {
+                alert("Ссылка для банка не настроена");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Данные для оплаты</h1>
+    <p>Получатель: <span id="name"></span></p>
+    <p>Счёт: <span id="account"></span></p>
+    <p>БИК: <span id="bic"></span></p>
+    
+    <h2>Выберите банк:</h2>
+    <button onclick="payWithBank('sber')">Сбербанк</button>
+    <button onclick="payWithBank('tinkoff')">Тинькофф</button>
+    <button onclick="payWithBank('vtb')">ВТБ</button>
+
+    <script>
+        // Показываем реквизиты на странице
+        document.getElementById('name').textContent = params.get('name');
+        document.getElementById('account').textContent = params.get('account');
+        document.getElementById('bic').textContent = params.get('bic');
+    </script>
+</body>
+</html>
