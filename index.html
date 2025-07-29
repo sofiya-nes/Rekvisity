@@ -240,43 +240,109 @@
             opacity: 1;
         }
         
-        .app-links {
+        /* Меню для банков */
+        .bank-menu {
             display: none;
-            position: absolute;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            z-index: 100;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .menu-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+        
+        .close-menu {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+        
+        .app-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .app-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #1e293b;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .app-link:hover {
+            background: #e6f0ff;
+            transform: translateY(-2px);
+            border-color: #3498db;
+        }
+        
+        .app-link i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .app-link span {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            text-align: center;
-            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
         }
         
-        .bank-card:hover .app-links {
-            display: flex;
-        }
-        
-        .app-link {
-            display: block;
-            width: 100%;
-            padding: 8px;
-            margin: 4px 0;
-            background: #3498db;
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-        }
-        
-        .app-link:hover {
-            background: #258cd1;
-            transform: scale(1.05);
+        /* Адаптивные стили */
+        @media (max-width: 480px) {
+            .bank-menu {
+                padding: 20px 15px;
+            }
+            
+            .app-link {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+            
+            .app-link i {
+                font-size: 1.3rem;
+                margin-right: 12px;
+            }
         }
     </style>
 </head>
@@ -384,59 +450,29 @@
                 </div>
                 
                 <div class="banks-grid">
-                    <div class="bank-card">
+                    <div class="bank-card" data-bank="sber">
                         <img src="https://cdn.freebiesupply.com/logos/large/2x/sberbank-of-russia-1-logo-png-transparent.png" alt="Сбербанк">
                         <p>Сбербанк</p>
-                        <div class="app-links">
-                            <a href="sberbank://transfer?bic=047501711&account=40703810707120000397" class="app-link">Открыть в приложении</a>
-                            <a href="https://online.sberbank.ru" class="app-link">Открыть в браузере</a>
-                            <a href="https://apps.apple.com/ru/app/sberbank-online/id555585240" class="app-link">App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=ru.sberbankmobile" class="app-link">Play Market</a>
-                        </div>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" data-bank="tinkoff">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tinkoff_Bank_Logo_2020.svg/240px-Tinkoff_Bank_Logo_2020.svg.png" alt="Тинькофф">
                         <p>Тинькофф</p>
-                        <div class="app-links">
-                            <a href="tinkoff://pay?bik=047501711&accountNumber=40703810707120000397" class="app-link">Открыть в приложении</a>
-                            <a href="https://www.tinkoff.ru" class="app-link">Открыть в браузере</a>
-                            <a href="https://apps.apple.com/ru/app/tinkoff-investments/id1328431034" class="app-link">App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=ru.tcsbank.mw" class="app-link">Play Market</a>
-                        </div>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" data-bank="vtb">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/VTB_Logo.svg/240px-VTB_Logo.svg.png" alt="ВТБ">
                         <p>ВТБ</p>
-                        <div class="app-links">
-                            <a href="vtb24://transfer?bic=047501711&account=40703810707120000397" class="app-link">Открыть в приложении</a>
-                            <a href="https://online.vtb.ru" class="app-link">Открыть в браузере</a>
-                            <a href="https://apps.apple.com/ru/app/%D0%B2%D1%82%D0%B1-%D0%BE%D0%BD%D0%BB%D0%B0%D0%B9%D0%BD/id1060501313" class="app-link">App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=ru.vtb24.mobilebanking.android" class="app-link">Play Market</a>
-                        </div>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" data-bank="alfa">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Alfa-Bank_logo.svg/240px-Alfa-Bank_logo.svg.png" alt="Альфа-банк">
                         <p>Альфа-банк</p>
-                        <div class="app-links">
-                            <a href="alfaclient://xfer/toaccount?bic=047501711&account=40703810707120000397" class="app-link">Открыть в приложении</a>
-                            <a href="https://alfabank.ru" class="app-link">Открыть в браузере</a>
-                            <a href="https://apps.apple.com/ru/app/%D0%B0%D0%BB%D1%8C%D1%84%D0%B0-%D0%BA%D0%BB%D0%B8%D0%BA/id944197201" class="app-link">App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=ru.alfabank.mobile.android" class="app-link">Play Market</a>
-                        </div>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" data-bank="raiffeisen">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Raiffeisen_Bank_International_2015_logo.svg/240px-Raiffeisen_Bank_International_2015_logo.svg.png" alt="Райффайзенбанк">
                         <p>Райффайзен</p>
-                        <div class="app-links">
-                            <a href="raiffeisen://transfer?bic=047501711&account=40703810707120000397" class="app-link">Открыть в приложении</a>
-                            <a href="https://www.raiffeisen.ru" class="app-link">Открыть в браузере</a>
-                            <a href="https://apps.apple.com/ru/app/%D1%80%D0%B0%D0%B9%D1%84%D1%84%D0%B0%D0%B9%D0%B7%D0%B5%D0%BD%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82/id522948527" class="app-link">App Store</a>
-                            <a href="https://play.google.com/store/apps/details?id=com.raiffeisenbank" class="app-link">Play Market</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -455,9 +491,171 @@
         </div>
     </div>
     
+    <!-- Меню выбора действия -->
+    <div class="overlay" id="overlay"></div>
+    
+    <div class="bank-menu" id="bank-menu">
+        <div class="menu-header">
+            <h3 id="menu-title">Выберите действие</h3>
+            <button class="close-menu" id="close-menu">&times;</button>
+        </div>
+        <div class="app-links" id="menu-links">
+            <!-- Ссылки будут добавляться динамически -->
+        </div>
+    </div>
+    
     <div class="notification" id="notification">Реквизиты скопированы!</div>
 
     <script>
+        // Данные для банков
+        const banksData = {
+            sber: {
+                name: "Сбербанк",
+                links: [
+                    { 
+                        type: "app", 
+                        url: "sberbank://transfer?bic=047501711&account=40703810707120000397", 
+                        text: "Открыть в приложении",
+                        icon: "fas fa-mobile-alt"
+                    },
+                    { 
+                        type: "web", 
+                        url: "https://online.sberbank.ru", 
+                        text: "Веб-версия банка",
+                        icon: "fas fa-globe"
+                    },
+                    { 
+                        type: "ios", 
+                        url: "https://apps.apple.com/ru/app/sberbank-online/id555585240", 
+                        text: "Установить для iOS",
+                        icon: "fab fa-apple"
+                    },
+                    { 
+                        type: "android", 
+                        url: "https://play.google.com/store/apps/details?id=ru.sberbankmobile", 
+                        text: "Установить для Android",
+                        icon: "fab fa-android"
+                    }
+                ]
+            },
+            tinkoff: {
+                name: "Тинькофф",
+                links: [
+                    { 
+                        type: "app", 
+                        url: "tinkoff://pay?bik=047501711&accountNumber=40703810707120000397", 
+                        text: "Открыть в приложении",
+                        icon: "fas fa-mobile-alt"
+                    },
+                    { 
+                        type: "web", 
+                        url: "https://www.tinkoff.ru", 
+                        text: "Веб-версия банка",
+                        icon: "fas fa-globe"
+                    },
+                    { 
+                        type: "ios", 
+                        url: "https://apps.apple.com/ru/app/tinkoff-investments/id1328431034", 
+                        text: "Установить для iOS",
+                        icon: "fab fa-apple"
+                    },
+                    { 
+                        type: "android", 
+                        url: "https://play.google.com/store/apps/details?id=ru.tcsbank.mw", 
+                        text: "Установить для Android",
+                        icon: "fab fa-android"
+                    }
+                ]
+            },
+            vtb: {
+                name: "ВТБ",
+                links: [
+                    { 
+                        type: "app", 
+                        url: "vtb24://transfer?bic=047501711&account=40703810707120000397", 
+                        text: "Открыть в приложении",
+                        icon: "fas fa-mobile-alt"
+                    },
+                    { 
+                        type: "web", 
+                        url: "https://online.vtb.ru", 
+                        text: "Веб-версия банка",
+                        icon: "fas fa-globe"
+                    },
+                    { 
+                        type: "ios", 
+                        url: "https://apps.apple.com/ru/app/%D0%B2%D1%82%D0%B1-%D0%BE%D0%BD%D0%BB%D0%B0%D0%B9%D0%BD/id1060501313", 
+                        text: "Установить для iOS",
+                        icon: "fab fa-apple"
+                    },
+                    { 
+                        type: "android", 
+                        url: "https://play.google.com/store/apps/details?id=ru.vtb24.mobilebanking.android", 
+                        text: "Установить для Android",
+                        icon: "fab fa-android"
+                    }
+                ]
+            },
+            alfa: {
+                name: "Альфа-банк",
+                links: [
+                    { 
+                        type: "app", 
+                        url: "alfaclient://xfer/toaccount?bic=047501711&account=40703810707120000397", 
+                        text: "Открыть в приложении",
+                        icon: "fas fa-mobile-alt"
+                    },
+                    { 
+                        type: "web", 
+                        url: "https://alfabank.ru", 
+                        text: "Веб-версия банка",
+                        icon: "fas fa-globe"
+                    },
+                    { 
+                        type: "ios", 
+                        url: "https://apps.apple.com/ru/app/%D0%B0%D0%BB%D1%8C%D1%84%D0%B0-%D0%BA%D0%BB%D0%B8%D0%BA/id944197201", 
+                        text: "Установить для iOS",
+                        icon: "fab fa-apple"
+                    },
+                    { 
+                        type: "android", 
+                        url: "https://play.google.com/store/apps/details?id=ru.alfabank.mobile.android", 
+                        text: "Установить для Android",
+                        icon: "fab fa-android"
+                    }
+                ]
+            },
+            raiffeisen: {
+                name: "Райффайзен",
+                links: [
+                    { 
+                        type: "app", 
+                        url: "raiffeisen://transfer?bic=047501711&account=40703810707120000397", 
+                        text: "Открыть в приложении",
+                        icon: "fas fa-mobile-alt"
+                    },
+                    { 
+                        type: "web", 
+                        url: "https://www.raiffeisen.ru", 
+                        text: "Веб-версия банка",
+                        icon: "fas fa-globe"
+                    },
+                    { 
+                        type: "ios", 
+                        url: "https://apps.apple.com/ru/app/%D1%80%D0%B0%D0%B9%D1%84%D1%84%D0%B0%D0%B9%D0%B7%D0%B5%D0%BD%D0%BA%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82/id522948527", 
+                        text: "Установить для iOS",
+                        icon: "fab fa-apple"
+                    },
+                    { 
+                        type: "android", 
+                        url: "https://play.google.com/store/apps/details?id=com.raiffeisenbank", 
+                        text: "Установить для Android",
+                        icon: "fab fa-android"
+                    }
+                ]
+            }
+        };
+        
         // Полные реквизиты для копирования
         const fullDetails = `Назначение платежа: Адвокату Несмияновой МП
 Получатель: Коллегия адвокатов Ленинского района
@@ -467,6 +665,14 @@
 БИК: 047501711
 Счет: 40703810707120000397
 Корр. счет: 30101810400000000711`;
+        
+        // Элементы интерфейса
+        const overlay = document.getElementById('overlay');
+        const bankMenu = document.getElementById('bank-menu');
+        const menuTitle = document.getElementById('menu-title');
+        const menuLinks = document.getElementById('menu-links');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const notification = document.getElementById('notification');
         
         // Функция копирования
         function copyToClipboard(text) {
@@ -480,13 +686,67 @@
         
         // Показать уведомление
         function showNotification(message) {
-            const notification = document.getElementById('notification');
             notification.textContent = message;
             notification.classList.add('show');
             
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+        }
+        
+        // Открыть меню банка
+        function openBankMenu(bankId) {
+            const bank = banksData[bankId];
+            if (!bank) return;
+            
+            menuTitle.textContent = bank.name;
+            menuLinks.innerHTML = '';
+            
+            // Добавляем ссылки
+            bank.links.forEach(link => {
+                const linkEl = document.createElement('a');
+                linkEl.href = link.url;
+                linkEl.className = 'app-link';
+                linkEl.innerHTML = `
+                    <i class="${link.icon}"></i>
+                    <span>${link.text}</span>
+                `;
+                
+                // Для ссылок приложения добавляем специальную обработку
+                if (link.type === 'app') {
+                    linkEl.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        openDeepLink(link.url);
+                    });
+                }
+                
+                menuLinks.appendChild(linkEl);
+            });
+            
+            // Показываем меню
+            bankMenu.style.display = 'block';
+            overlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Закрыть меню
+        function closeBankMenu() {
+            bankMenu.style.display = 'none';
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Открыть deeplink
+        function openDeepLink(url) {
+            // Пытаемся открыть приложение
+            window.location.href = url;
+            
+            // Если через 500 мс не открылось, показываем сообщение
+            setTimeout(() => {
+                if (!document.hidden) {
+                    showNotification('Приложение не открылось. Попробуйте другой способ.');
+                }
+            }, 500);
         }
         
         // Инициализация кнопок копирования
@@ -502,41 +762,23 @@
             copyToClipboard(fullDetails);
         });
         
-        // Функция для открытия deeplink
-        function openDeepLink(deeplink, fallback) {
-            // Пытаемся открыть через iframe (работает на iOS)
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            iframe.src = deeplink;
-            document.body.appendChild(iframe);
-            
-            // Пытаемся открыть через window.location (работает на Android)
-            window.location.href = deeplink;
-            
-            // Если через 500 мс приложение не открылось, показываем fallback
-            setTimeout(() => {
-                if (!document.hidden) {
-                    document.body.removeChild(iframe);
-                    if (fallback && typeof fallback === 'function') {
-                        fallback();
-                    }
-                }
-            }, 500);
-        }
-        
         // Обработчики для банков
         document.querySelectorAll('.bank-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                // Проверяем, что клик был не по ссылке
-                if (e.target.tagName === 'A') return;
-                
-                const deeplink = this.querySelector('.app-link');
-                if (deeplink) {
-                    openDeepLink(deeplink.href, () => {
-                        showNotification('Приложение не найдено. Выберите вариант в меню.');
-                    });
-                }
+            card.addEventListener('click', function() {
+                const bankId = this.dataset.bank;
+                openBankMenu(bankId);
             });
+        });
+        
+        // Закрытие меню
+        closeMenuBtn.addEventListener('click', closeBankMenu);
+        overlay.addEventListener('click', closeBankMenu);
+        
+        // Закрытие при нажатии Esc
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeBankMenu();
+            }
         });
     </script>
 </body>
