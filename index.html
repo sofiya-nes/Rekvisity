@@ -345,7 +345,7 @@
                 
                 <div class="banks-grid">
                     <div class="bank-card" data-bank="sber">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Sberbank_Logo_2020.svg/240px-Sberbank_Logo_2020.svg.png" alt="Сбербанк">
+                        <img src="https://cdn.freebiesupply.com/logos/large/2x/sberbank-of-russia-1-logo-png-transparent.png" alt="Сбербанк">
                         <p>Сбербанк</p>
                     </div>
                     
@@ -388,13 +388,57 @@
     <div class="notification" id="notification">Реквизиты скопированы!</div>
 
     <script>
-        // Deeplinks для банков
+        // Функция для правильного кодирования параметров
+        function encodeDeepLinkParams(params) {
+            return Object.keys(params)
+                .map(key => `${key}=${encodeURIComponent(params[key])}`)
+                .join('&');
+        }
+
+        // Deeplinks для банков с правильным кодированием
         const bankLinks = {
-            sber: "sberbank://transfer?bic=047501711&account=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&kpp=744901001&bankName=Челиндбанк&corrAccount=30101810400000000711&comment=Адвокату%20Несмияновой%20МП",
-            tinkoff: "tinkoff://pay?bik=047501711&accountNumber=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&comment=Адвокату%20Несмияновой%20МП",
-            vtb: "vtb24://transfer?bic=047501711&account=40703810707120000397&beneficiary=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&kpp=744901001&paymentPurpose=Адвокату%20Несмияновой%20МП",
-            alfa: "alfaclient://xfer/toaccount?bic=047501711&account=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&comment=Адвокату%20Несмияновой%20МП",
-            raiffeisen: "raiffeisen://transfer?bic=047501711&account=40703810707120000397&beneficiary=Коллегия%20адвокатов%20Ленинского%20района&purpose=Адвокату%20Несмияновой%20МП"
+            sber: "sberbank://transfer?" + encodeDeepLinkParams({
+                bic: "047501711",
+                account: "40703810707120000397",
+                name: "Коллегия адвокатов Ленинского района",
+                inn: "7449040890",
+                kpp: "744901001",
+                bankName: "Челиндбанк",
+                corrAccount: "30101810400000000711",
+                comment: "Адвокату Несмияновой МП"
+            }),
+            
+            tinkoff: "tinkoff://pay?" + encodeDeepLinkParams({
+                bik: "047501711",
+                accountNumber: "40703810707120000397",
+                name: "Коллегия адвокатов Ленинского района",
+                inn: "7449040890",
+                comment: "Адвокату Несмияновой МП"
+            }),
+            
+            vtb: "vtb24://transfer?" + encodeDeepLinkParams({
+                bic: "047501711",
+                account: "40703810707120000397",
+                beneficiary: "Коллегия адвокатов Ленинского района",
+                inn: "7449040890",
+                kpp: "744901001",
+                paymentPurpose: "Адвокату Несмияновой МП"
+            }),
+            
+            alfa: "alfaclient://xfer/toaccount?" + encodeDeepLinkParams({
+                bic: "047501711",
+                account: "40703810707120000397",
+                name: "Коллегия адвокатов Ленинского района",
+                inn: "7449040890",
+                comment: "Адвокату Несмияновой МП"
+            }),
+            
+            raiffeisen: "raiffeisen://transfer?" + encodeDeepLinkParams({
+                bic: "047501711",
+                account: "40703810707120000397",
+                beneficiary: "Коллегия адвокатов Ленинского района",
+                purpose: "Адвокату Несмияновой МП"
+            })
         };
         
         // Полные реквизиты для копирования
@@ -440,12 +484,34 @@
             card.addEventListener('click', function() {
                 const bank = this.dataset.bank;
                 if (bankLinks[bank]) {
+                    // Попытка открыть приложение
                     window.location.href = bankLinks[bank];
                     
-                    // Резервное решение на случай, если приложение не открылось
+                    // Резервное решение для Android
                     setTimeout(() => {
                         if (!document.hidden) {
-                            alert('Приложение банка не найдено. Скопируйте реквизиты и выполните платеж вручную.');
+                            // Для iOS используем универсальную ссылку
+                            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                                window.location.href = "https://apps.apple.com/ru/app/sberbank-online/id555585240";
+                            } 
+                            // Для Android открываем Play Market
+                            else if (navigator.userAgent.match(/Android/i)) {
+                                switch(bank) {
+                                    case 'sber':
+                                        window.location.href = "https://play.google.com/store/apps/details?id=ru.sberbankmobile";
+                                        break;
+                                    case 'vtb':
+                                        window.location.href = "https://play.google.com/store/apps/details?id=ru.vtb24.mobilebanking.android";
+                                        break;
+                                    case 'tinkoff':
+                                        window.location.href = "https://play.google.com/store/apps/details?id=ru.tinkoff.acquiring";
+                                        break;
+                                    default:
+                                        alert('Приложение банка не найдено. Скопируйте реквизиты и выполните платеж вручную.');
+                                }
+                            } else {
+                                alert('Приложение банка не найдено. Скопируйте реквизиты и выполните платеж вручную.');
+                            }
                         }
                     }, 1000);
                 }
