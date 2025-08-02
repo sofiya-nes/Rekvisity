@@ -14,7 +14,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            background: linear-gradient(135deg, #f5f9ff 0%, #e6f3ff 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -107,9 +107,47 @@
             border-radius: 12px;
         }
         
+        .qr-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .qr-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .qr-btn:hover {
+            background: #258cd1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .qr-btn.download {
+            background: #34d399;
+        }
+        
+        .qr-btn.download:hover {
+            background: #2bbd89;
+        }
+        
+        /* Инструкции */
         .instruction-box {
-            background: #fff9e6;
-            border-left: 4px solid #ffcc00;
+            background: #f0fff4;
+            border-left: 4px solid #34d399;
             padding: 20px;
             border-radius: 12px;
             margin-top: 20px;
@@ -131,8 +169,61 @@
         .instruction-box li {
             margin-bottom: 10px;
             line-height: 1.5;
+            padding-left: 5px;
         }
         
+        .instruction-box li strong {
+            color: #2c3e50;
+        }
+        
+        .instruction-box .sub-item {
+            margin-left: 20px;
+            display: block;
+            color: #4b5563;
+        }
+        
+        .mobile-instruction {
+            background: #e6f7ff;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 25px;
+            text-align: left;
+        }
+        
+        .mobile-instruction h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mobile-instruction ol {
+            padding-left: 20px;
+        }
+        
+        .mobile-instruction li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            padding-left: 5px;
+        }
+        
+        .mobile-instruction li strong {
+            color: #2c3e50;
+        }
+        
+        .support-note {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-style: italic;
+            color: #4b5563;
+            border-left: 3px solid #34d399;
+        }
+        
+        /* Детали реквизитов */
         .details-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -190,6 +281,7 @@
             color: #2563eb;
         }
         
+        /* Копирование всех реквизитов */
         .copy-section {
             background: #f1f8ff;
             border-radius: 16px;
@@ -222,6 +314,7 @@
             box-shadow: 0 6px 16px rgba(52, 152, 219, 0.35);
         }
         
+        /* Подвал */
         .footer-note {
             text-align: center;
             padding: 20px;
@@ -231,12 +324,13 @@
             border-top: 1px solid #edf2f7;
         }
         
+        /* Уведомления */
         .notification {
             position: fixed;
             top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: #10b981;
+            background: #34d399;
             color: white;
             padding: 15px 30px;
             border-radius: 12px;
@@ -251,13 +345,17 @@
         .notification.show {
             opacity: 1;
         }
+        
+        .notification.error {
+            background: #ef4444;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Оплата адвокату Несмияновой МП</h1>
-            <p>Отсканируйте QR-код для оплаты по реквизитам</p>
+            <p>Выберите удобный способ оплаты</p>
         </div>
         
         <div class="content">
@@ -265,7 +363,13 @@
             <div class="qr-container">
                 <div class="qr-box">
                     <img src="qrcod.png" alt="QR-код для оплаты" class="qr-image">
-                    <p>Отсканируйте QR-код в приложении вашего банка</p>
+                    <p>QR-код для оплаты через банковское приложение</p>
+                    
+                    <div class="qr-actions">
+                        <a href="qrcod.png" download="qr-оплата-несмиянова.png" class="qr-btn download">
+                            <i class="fas fa-download"></i> Скачать QR-код
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="instruction-box">
@@ -273,11 +377,30 @@
                     <ol>
                         <li>Откройте приложение вашего банка на смартфоне</li>
                         <li>Найдите раздел "Оплата по QR-коду" или "Сканировать"</li>
-                        <li>Наведите камеру на QR-код выше</li>
+                        <li>Выберите один из вариантов:
+                            <span class="sub-item"><strong>Вариант 1:</strong> Наведите камеру на QR-код выше</span>
+                            <span class="sub-item"><strong>Вариант 2:</strong> Загрузите скачанный QR-код из галереи</span>
+                        </li>
                         <li>Проверьте реквизиты и назначение платежа</li>
                         <li>Подтвердите оплату</li>
                         <li>Сохраните чек об оплате</li>
                     </ol>
+                </div>
+                
+                <div class="mobile-instruction">
+                    <h3><i class="fas fa-mobile-alt"></i> Если Вы зашли с телефона:</h3>
+                    <ol>
+                        <li><strong>Нажмите "Скачать QR-код"</strong> (файл сохранится в галерее)</li>
+                        <li>Откройте приложение вашего банка</li>
+                        <li>Перейдите в раздел оплаты по QR-коду</li>
+                        <li>Выберите "Загрузить из галереи" или "Выбрать файл"</li>
+                        <li>Найдите скачанный QR-код в галерее</li>
+                        <li>Подтвердите платеж и сохраните чек</li>
+                    </ol>
+                    
+                    <div class="support-note">
+                        <i class="fas fa-check-circle"></i> Все популярные банки (Сбербанк, Тинькофф, ВТБ и др.) поддерживают оплату по QR-коду из галереи
+                    </div>
                 </div>
             </div>
             
@@ -402,17 +525,22 @@
         // Функция копирования
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
-                const notification = document.getElementById('notification');
-                notification.textContent = 'Реквизиты скопированы!';
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
+                showNotification('Реквизиты скопированы!');
             }).catch(err => {
                 console.error('Ошибка копирования: ', err);
-                alert('Не удалось скопировать реквизиты. Скопируйте вручную.');
+                showNotification('Ошибка копирования! Скопируйте вручную', true);
             });
+        }
+        
+        // Показать уведомление
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = isError ? 'notification error show' : 'notification show';
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 3000);
         }
         
         // Инициализация кнопок копирования
