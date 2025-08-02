@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Оплата адвокату Несмияновой МП</title>
+    <title>Оплата по реквизитам</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -155,7 +155,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
+        }
+        
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-color: #3498db;
         }
         
         .bank-card img {
@@ -170,28 +175,6 @@
             font-weight: 500;
             margin: 0;
             font-size: 0.95rem;
-        }
-        
-        .app-link-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin-top: 12px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            text-align: center;
-        }
-        
-        .app-link-btn:hover {
-            background: #258cd1;
-            transform: translateY(-2px);
         }
         
         .copy-section {
@@ -256,6 +239,30 @@
             opacity: 1;
         }
         
+        .qr-code-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .qr-code {
+            max-width: 250px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
         .instruction {
             background: #fff9e6;
             border-left: 4px solid #ffcc00;
@@ -270,10 +277,28 @@
     <div class="container">
         <div class="header">
             <h1>Оплата адвокату Несмияновой МП</h1>
-            <p>Выберите ваш банк для оплаты или скопируйте реквизиты</p>
+            <p>Отсканируйте QR-код или выберите банк для оплаты</p>
         </div>
         
         <div class="content">
+            <!-- QR-код -->
+            <div class="qr-code-container">
+                <div class="qr-code">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://ваш-сайт.com/pay?recipient=Коллегия%20адвокатов%20Ленинского%20района&account=40703810707120000397&bic=047501711&inn=7449040890&purpose=Адвокату%20Несмияновой%20МП" alt="QR-код для оплаты">
+                </div>
+                <p>Отсканируйте QR-код любым банковским приложением</p>
+                
+                <div class="instruction">
+                    <p><strong>Как оплатить через QR:</strong></p>
+                    <ol>
+                        <li>Откройте приложение вашего банка</li>
+                        <li>Найдите раздел "Сканировать QR-код"</li>
+                        <li>Наведите камеру на код</li>
+                        <li>Подтвердите платеж</li>
+                    </ol>
+                </div>
+            </div>
+            
             <div class="section">
                 <div class="section-title">
                     <i class="fas fa-file-invoice"></i>
@@ -369,54 +394,30 @@
                     <h2>Оплатить через приложение банка</h2>
                 </div>
                 
-                <div class="instruction">
-                    <p><strong>Как оплатить:</strong></p>
-                    <ol>
-                        <li>Нажмите на кнопку "Открыть в приложении" под вашим банком</li>
-                        <li>Если появится запрос "Открыть в приложении?" - нажмите "Открыть"</li>
-                        <li>Если приложение не открылось, скопируйте реквизиты и оплатите вручную</li>
-                    </ol>
-                </div>
-                
                 <div class="banks-grid">
-                    <div class="bank-card">
+                    <div class="bank-card" onclick="openBank('sber')">
                         <img src="https://cdn.freebiesupply.com/logos/large/2x/sberbank-of-russia-1-logo-png-transparent.png" alt="Сбербанк">
                         <p>Сбербанк</p>
-                        <a href="sberbank://transfer?bic=047501711&account=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&kpp=744901001&bankName=Челиндбанк&corrAccount=30101810400000000711&comment=Адвокату%20Несмияновой%20МП" class="app-link-btn">
-                            Открыть в приложении
-                        </a>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" onclick="openBank('tinkoff')">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tinkoff_Bank_Logo_2020.svg/240px-Tinkoff_Bank_Logo_2020.svg.png" alt="Тинькофф">
                         <p>Тинькофф</p>
-                        <a href="tinkoff://pay?bik=047501711&accountNumber=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&comment=Адвокату%20Несмияновой%20МП" class="app-link-btn">
-                            Открыть в приложении
-                        </a>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" onclick="openBank('vtb')">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/VTB_Logo.svg/240px-VTB_Logo.svg.png" alt="ВТБ">
                         <p>ВТБ</p>
-                        <a href="vtb24://transfer?bic=047501711&account=40703810707120000397&beneficiary=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&kpp=744901001&paymentPurpose=Адвокату%20Несмияновой%20МП" class="app-link-btn">
-                            Открыть в приложении
-                        </a>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" onclick="openBank('alfa')">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Alfa-Bank_logo.svg/240px-Alfa-Bank_logo.svg.png" alt="Альфа-банк">
                         <p>Альфа-банк</p>
-                        <a href="alfaclient://xfer/toaccount?bic=047501711&account=40703810707120000397&name=Коллегия%20адвокатов%20Ленинского%20района&inn=7449040890&comment=Адвокату%20Несмияновой%20МП" class="app-link-btn">
-                            Открыть в приложении
-                        </a>
                     </div>
                     
-                    <div class="bank-card">
+                    <div class="bank-card" onclick="openBank('raiffeisen')">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Raiffeisen_Bank_International_2015_logo.svg/240px-Raiffeisen_Bank_International_2015_logo.svg.png" alt="Райффайзенбанк">
                         <p>Райффайзен</p>
-                        <a href="raiffeisen://transfer?bic=047501711&account=40703810707120000397&beneficiary=Коллегия%20адвокатов%20Ленинского%20района&purpose=Адвокату%20Несмияновой%20МП" class="app-link-btn">
-                            Открыть в приложении
-                        </a>
                     </div>
                 </div>
             </div>
@@ -476,24 +477,12 @@
             copyToClipboard(fullDetails);
         });
         
-        // Обработчики для ссылок приложений
-        document.querySelectorAll('.app-link-btn').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Сохраняем оригинальную ссылку
-                const originalHref = this.href;
-                
-                // Пытаемся открыть приложение
-                window.location.href = originalHref;
-                
-                // Fallback: если через 500 мс приложение не открылось
-                setTimeout(() => {
-                    if (!document.hidden) {
-                        // Показываем инструкцию
-                        alert('Приложение не открылось. Возможно, оно не установлено. Скопируйте реквизиты и оплатите вручную.');
-                    }
-                }, 500);
-            });
-        });
+        // Функция открытия банковского приложения
+        function openBank(bank) {
+            // Вместо прямого открытия приложения перенаправляем на страницу оплаты
+            // с параметром банка для статистики
+            window.location.href = `https://ваш-сайт.com/pay?bank=${bank}&recipient=Коллегия%20адвокатов%20Ленинского%20района&account=40703810707120000397&bic=047501711&inn=7449040890&purpose=Адвокату%20Несмияновой%20МП`;
+        }
     </script>
 </body>
 </html>
