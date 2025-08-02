@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата адвокату</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Стили аналогичные предыдущим */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Завершение оплаты</h1>
+            <p>Выберите ваш банк для перехода в приложение</p>
+        </div>
+        
+        <div class="content">
+            <div class="banks-grid">
+                <!-- Банки с реальными deeplinks -->
+                <div class="bank-card" onclick="window.location.href='sberbank://'">
+                    <img src="https://cdn.freebiesupply.com/logos/large/2x/sberbank-of-russia-1-logo-png-transparent.png" alt="Сбербанк">
+                    <p>Сбербанк</p>
+                </div>
+                
+                <div class="bank-card" onclick="window.location.href='tinkoff://'">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tinkoff_Bank_Logo_2020.svg/240px-Tinkoff_Bank_Logo_2020.svg.png" alt="Тинькофф">
+                    <p>Тинькофф</p>
+                </div>
+                
+                <!-- Добавьте другие банки -->
+            </div>
+            
+            <div class="instruction">
+                <p><strong>Если приложение не открылось автоматически:</strong></p>
+                <ol>
+                    <li>Нажмите на логотип вашего банка</li>
+                    <li>В появившемся диалоге выберите "Открыть"</li>
+                    <li>Если приложения нет - установите его</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // После загрузки страницы пытаемся определить банк из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const bank = urlParams.get('bank');
+        
+        // Автоматическое перенаправление для выбранных банков
+        const bankRedirects = {
+            'sber': 'sberbank://',
+            'tinkoff': 'tinkoff://',
+            'vtb': 'vtb24://',
+            'alfa': 'alfaclient://',
+            'raiffeisen': 'raiffeisen://'
+        };
+        
+        if (bank && bankRedirects[bank]) {
+            // Пытаемся открыть приложение
+            window.location.href = bankRedirects[bank];
+            
+            // Если через 1.5 сек не открылось - остаемся на странице выбора
+            setTimeout(() => {
+                if (!document.hidden) {
+                    document.getElementById('instructions').style.display = 'block';
+                }
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
