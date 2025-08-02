@@ -6,7 +6,7 @@
     <meta property="og:title" content="Оплата адвокату Несмияновой МП">
     <meta property="og:description" content="Безопасная оплата услуг через QR-код и банковские реквизиты">
     <meta property="og:image" content="https://example.com/path/to/your-share-image.png">
-    <meta property="og:url" content="https://your-website-url.com">
+    <meta property="og:url" content="https://payment-page-jade-zeta.vercel.app/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Оплата адвокату Несмияновой МП">
@@ -565,6 +565,22 @@
         // Кнопка копирования всех реквизитов
         document.getElementById('copy-all-btn').addEventListener('click', function() {
             copyToClipboard(fullDetails);
+        });
+
+        document.getElementById('share-qr-btn').addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'QR-код для оплаты адвокату Несмияновой МП',
+                    text: 'Используйте этот QR-код для оплаты услуг в банковском приложении',
+                    url: window.location.href
+                }).catch(error => {
+                    console.log('Ошибка расшаривания:', error);
+                });
+            } else {
+                // Fallback для браузеров без поддержки Web Share API
+                copyToClipboard(window.location.href);
+                showNotification('Ссылка скопирована! Отправьте её в мессенджере');
+            }
         });
     </script>
 </body>
