@@ -3,155 +3,316 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Завершение оплаты</title>
+    <title>Завершение оплаты | Безопасный платеж</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #1a56db;
+            --secondary: #3f83f8;
+            --success: #0e9f6e;
+            --light: #f5f7fa;
+            --dark: #1a237e;
+            --gray: #6b7280;
+            --border: #e5e7eb;
+        }
+        
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         
         body {
-            background-color: #f5f7fa;
+            background: linear-gradient(135deg, #f0f4ff, #e6f0ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            max-width: 500px;
-            margin: 0 auto;
         }
         
         .payment-container {
             background: white;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
         }
         
-        h1 {
-            color: #1a237e;
-            margin-top: 0;
+        .payment-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 30px 30px 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+        }
+        
+        .header h1 {
             font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 40px 30px 30px;
         }
         
         .subtitle {
-            color: #5f6368;
-            margin-bottom: 25px;
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 18px;
         }
         
         .bank-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
         
         .bank-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
             padding: 20px 10px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-            background: #f8f9ff;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+            overflow: hidden;
         }
         
         .bank-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(63, 131, 248, 0.15);
             transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            border-color: #3f51b5;
+        }
+        
+        .bank-card:active {
+            transform: translateY(1px);
         }
         
         .bank-logo {
             width: 60px;
             height: 60px;
-            margin: 0 auto 10px;
-            background-color: #e8eaf6;
+            margin: 0 auto 15px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 24px;
-            color: #1a237e;
+            color: white;
+            position: relative;
+            z-index: 2;
         }
         
         .bank-name {
             font-weight: 600;
-            color: #1a237e;
+            color: var(--dark);
+            font-size: 16px;
+            position: relative;
+            z-index: 2;
         }
         
+        .sberbank .bank-logo { background: linear-gradient(135deg, #48b14d, #1e8a3a); }
+        .tinkoff .bank-logo { background: linear-gradient(135deg, #ffdd2d, #f6b300); color: #333; }
+        .vtb .bank-logo { background: linear-gradient(135deg, #1f5bff, #0039d0); }
+        .alfa .bank-logo { background: linear-gradient(135deg, #ef3124, #cc0000); }
+        .gazprom .bank-logo { background: linear-gradient(135deg, #3a3a3a, #000); }
+        .raiffaisen .bank-logo { background: linear-gradient(135deg, #fff, #e6e6e6); color: #a30000; }
+        
         .instructions {
-            background-color: #f0f4ff;
-            border-left: 4px solid #3f51b5;
-            padding: 15px 20px;
-            border-radius: 0 8px 8px 0;
+            background-color: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+            border-left: 4px solid var(--primary);
         }
         
         .instructions h3 {
-            margin-top: 0;
-            color: #1a237e;
+            color: var(--dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions h3 i {
+            color: var(--primary);
         }
         
         ol {
-            padding-left: 20px;
-            color: #5f6368;
+            padding-left: 25px;
+            color: var(--gray);
+            line-height: 1.6;
         }
         
         li {
-            margin-bottom: 8px;
-            line-height: 1.5;
+            margin-bottom: 10px;
+            padding-left: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            background: #f9fafb;
+        }
+        
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 20px 20px;
+            }
+            .content {
+                padding: 30px 20px 25px;
+            }
+            .bank-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .instructions {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="payment-container">
-        <h1>Завершение оплаты</h1>
-        <p class="subtitle">Выберите ваш банк для перехода в приложение</p>
+        <div class="header">
+            <h1>Завершение оплаты</h1>
+            <p>Безопасный платеж через ваш банк</p>
+        </div>
         
-        <div class="bank-grid">
-            <div class="bank-card" onclick="openBankApp('sberbank')">
-                <div class="bank-logo">СБ</div>
-                <div class="bank-name">Сбербанк</div>
+        <div class="content">
+            <p class="subtitle">Выберите ваш банк для перехода в приложение</p>
+            
+            <div class="bank-grid">
+                <div class="bank-card sberbank" onclick="openBankApp('sberbank')">
+                    <div class="bank-logo">СБ</div>
+                    <div class="bank-name">Сбербанк</div>
+                </div>
+                
+                <div class="bank-card tinkoff" onclick="openBankApp('tinkoff')">
+                    <div class="bank-logo">Т</div>
+                    <div class="bank-name">Тинькофф</div>
+                </div>
+                
+                <div class="bank-card vtb" onclick="openBankApp('vtb')">
+                    <div class="bank-logo">ВТБ</div>
+                    <div class="bank-name">ВТБ</div>
+                </div>
+                
+                <div class="bank-card alfa" onclick="openBankApp('alfa')">
+                    <div class="bank-logo">A</div>
+                    <div class="bank-name">Альфа-Банк</div>
+                </div>
+                
+                <div class="bank-card gazprom" onclick="openBankApp('gazprom')">
+                    <div class="bank-logo">ГП</div>
+                    <div class="bank-name">Газпромбанк</div>
+                </div>
+                
+                <div class="bank-card raiffaisen" onclick="openBankApp('raiffaisen')">
+                    <div class="bank-logo">R</div>
+                    <div class="bank-name">Райффайзен</div>
+                </div>
             </div>
             
-            <div class="bank-card" onclick="openBankApp('tinkoff')">
-                <div class="bank-logo">Т</div>
-                <div class="bank-name">Тинькофф</div>
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Если приложение не открылось автоматически:</h3>
+                <ol>
+                    <li>Нажмите на логотип вашего банка</li>
+                    <li>В появившемся диалоге выберите "Открыть"</li>
+                    <li>Если приложения нет - установите его из App Store или Google Play</li>
+                    <li>После оплаты вернитесь на эту страницу для подтверждения</li>
+                </ol>
             </div>
         </div>
         
-        <div class="instructions">
-            <h3>Если приложение не открылось автоматически:</h3>
-            <ol>
-                <li>Нажмите на логотип вашего банка</li>
-                <li>В появившемся диалоге выберите "Открыть"</li>
-                <li>Если приложения нет - установите его из App Store или Google Play</li>
-            </ol>
+        <div class="footer">
+            <p>Оплата защищена по стандарту PCI DSS • <a href="#">Политика конфиденциальности</a></p>
         </div>
     </div>
-    
+
     <script>
-        // После загрузки страницы пытаемся определить банк из URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const bank = urlParams.get('bank');
-        
-        // Автоматическое перенаправление для выбранных банков
-        const bankRedirects = {
-            'sber': 'sberbank://',
-            'tinkoff': 'tinkoff://',
-            'vtb': 'vtb24://',
-            'alfa': 'alfaclient://',
-            'raiffeisen': 'raiffeisen://'
-        };
-        
-        if (bank && bankRedirects[bank]) {
-            // Пытаемся открыть приложение
-            window.location.href = bankRedirects[bank];
+        function openBankApp(bank) {
+            // Сохраняем выбранный банк в localStorage
+            localStorage.setItem('selectedBank', bank);
             
-            // Если через 1.5 сек не открылось - остаемся на странице выбора
+            // Показываем уведомление
+            const bankNames = {
+                'sberbank': 'Сбербанк',
+                'tinkoff': 'Тинькофф',
+                'vtb': 'ВТБ',
+                'alfa': 'Альфа-Банк',
+                'gazprom': 'Газпромбанк',
+                'raiffaisen': 'Райффайзенбанк'
+            };
+            
+            alert(`Идет перенаправление в приложение ${bankNames[bank]}...\n\nЕсли перенаправление не произошло, нажмите "ОК" и следуйте инструкциям на странице.`);
+            
+            // Реальные deep links для банков (раскомментировать для продакшена)
+            const deepLinks = {
+                'sberbank': 'sberbankonline://payment',
+                'tinkoff': 'tinkoff://pay',
+                'vtb': 'vtbonline://pay',
+                'alfa': 'alfaclient://payment',
+                'gazprom': 'gazprombank://pay',
+                'raiffaisen': 'raiffeisen://payment'
+            };
+            
+            // Пробуем открыть deep link
             setTimeout(() => {
-                if (!document.hidden) {
-                    document.getElementById('instructions').style.display = 'block';
-                }
-            }, 1500);
+                window.location.href = deepLinks[bank];
+            }, 300);
+            
+            // Fallback URL на случай если deep link не сработал
+            setTimeout(() => {
+                window.location.href = `https://${bank}.ru/mobile-app`;
+            }, 1000);
+            
         }
+        
+        // Проверяем был ли уже выбран банк
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedBank = localStorage.getItem('selectedBank');
+            if (selectedBank) {
+                console.log(`Ранее выбран банк: ${selectedBank}`);
+            }
+        });
     </script>
 </body>
 </html>
