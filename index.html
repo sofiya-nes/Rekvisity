@@ -251,52 +251,6 @@
         .notification.show {
             opacity: 1;
         }
-        
-        .banks-section {
-            margin-top: 40px;
-        }
-        
-        .banks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .bank-card {
-            background: white;
-            border-radius: 16px;
-            padding: 22px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .bank-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            border-color: #3498db;
-        }
-        
-        .bank-card img {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-            margin-bottom: 15px;
-        }
-        
-        .bank-card p {
-            color: #334155;
-            font-weight: 500;
-            margin: 0;
-            font-size: 0.95rem;
-        }
     </style>
 </head>
 <body>
@@ -310,8 +264,7 @@
             <!-- QR-код и инструкция -->
             <div class="qr-container">
                 <div class="qr-box">
-                    <!-- ВСТАВЬТЕ СВОЙ QR-КОД ЗДЕСЬ -->
-                    <img src="qrcod.png" alt="QR-код для оплаты" class="qr-image">
+                    <img src="qrcode.png" alt="QR-код для оплаты" class="qr-image">
                     <p>Отсканируйте QR-код в приложении вашего банка</p>
                 </div>
                 
@@ -426,41 +379,6 @@
                     <i class="far fa-copy"></i> Скопировать все реквизиты
                 </button>
             </div>
-            
-            <!-- Банки -->
-            <div class="section banks-section">
-                <div class="section-title">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h2>Быстрый переход в приложение банка</h2>
-                </div>
-                
-                <div class="banks-grid">
-                    <div class="bank-card" onclick="openBank('sber')">
-                        <img src="https://cdn.freebiesupply.com/logos/large/2x/sberbank-of-russia-1-logo-png-transparent.png" alt="Сбербанк">
-                        <p>Сбербанк</p>
-                    </div>
-                    
-                    <div class="bank-card" onclick="openBank('tinkoff')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Tinkoff_Bank_Logo_2020.svg/240px-Tinkoff_Bank_Logo_2020.svg.png" alt="Тинькофф">
-                        <p>Тинькофф</p>
-                    </div>
-                    
-                    <div class="bank-card" onclick="openBank('vtb')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/VTB_Logo.svg/240px-VTB_Logo.svg.png" alt="ВТБ">
-                        <p>ВТБ</p>
-                    </div>
-                    
-                    <div class="bank-card" onclick="openBank('alfa')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Alfa-Bank_logo.svg/240px-Alfa-Bank_logo.svg.png" alt="Альфа-банк">
-                        <p>Альфа-банк</p>
-                    </div>
-                    
-                    <div class="bank-card" onclick="openBank('raiffeisen')">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Raiffeisen_Bank_International_2015_logo.svg/240px-Raiffeisen_Bank_International_2015_logo.svg.png" alt="Райффайзенбанк">
-                        <p>Райффайзен</p>
-                    </div>
-                </div>
-            </div>
         </div>
         
         <div class="footer-note">
@@ -509,37 +427,6 @@
         document.getElementById('copy-all-btn').addEventListener('click', function() {
             copyToClipboard(fullDetails);
         });
-        
-        // Функция открытия банковского приложения
-        function openBank(bank) {
-            const bankLinks = {
-                'sber': 'sberbankonline://qr/payment',
-                'tinkoff': 'tinkoff://qr',
-                'vtb': 'vtbmobile://qr',
-                'alfa': 'alfaclient://qr',
-                'raiffeisen': 'raiffeisen://qr'
-            };
-            
-            const fallbackUrls = {
-                'sber': 'https://online.sberbank.ru',
-                'tinkoff': 'https://www.tinkoff.ru',
-                'vtb': 'https://www.vtb.ru/personal/',
-                'alfa': 'https://alfabank.ru',
-                'raiffeisen': 'https://www.raiffeisen.ru'
-            };
-            
-            try {
-                // Пробуем открыть deep link
-                window.location.href = bankLinks[bank];
-                
-                // Fallback на случай если не открылось
-                setTimeout(() => {
-                    window.location.href = fallbackUrls[bank];
-                }, 500);
-            } catch (e) {
-                window.location.href = fallbackUrls[bank];
-            }
-        }
     </script>
 </body>
 </html>
